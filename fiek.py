@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter.ttk import *
+from PIL import ImageTk, Image
 from tkinter import filedialog
 from tkinter import messagebox
 from tkinter.filedialog import askopenfile
@@ -15,14 +16,21 @@ def ndihma():
     messagebox.showinfo("Kontribues","\n".join(["Lirim Islami©","Uran Lajqi©","Jon Rexhbogaj©"]))
 
 
+def resize(e):
+    global image1, resizer,image2
+    image1 = Image.open("C:\\Users\\DELL\\Desktop\\New folder\\j.png")
+    resizer = image1.resize((e.width,e.height), Image.ANTIALIAS)
+    image2 = ImageTk.PhotoImage(resizer)
+    canvas.create_image(0,0,anchor=NW,image=image2)
+
+
+
 window = Tk()
-window.title("Connecting...")
-window.geometry('510x290')
-C = Canvas(window, bg="blue", height=250, width=300)
-bg = PhotoImage(file = "C:/Users/DELL/Desktop/New folder/j.png");
-label1 = Label(window, image = bg)
-label1.place(x = 0,y = 0,relwidth=1, relheight=1)
-C.pack()
+window.title("Siguri 2021©")
+canvas = Canvas(window,width=500, height=500)
+canvas.pack(fill="both", expand=True)
+my_image = ImageTk.PhotoImage(file="C:\\Users\\DELL\\Desktop\\New folder\\j.png")
+canvas.create_image(0,0,anchor=NW,image=my_image)
 menubar = Menu(window)
 filemenu = Menu(menubar,tearoff=0)
 filemenu.add_command(label="New",command=hap)
@@ -45,11 +53,20 @@ editmenu.add_command(label="Delete")
 editmenu.add_command(label="Select All")
 
 menubar.add_cascade(label="Edit", menu=editmenu)
-helpmenu = Menu(menubar, tearoff=0)
 
+view = Menu(menubar, tearoff=0)
+view.add_command(label="Zoom In")
+view.add_command(label="Zoom Out")
+view.add_command(label="Status Bar")
+menubar.add_cascade(label="View", menu=view)
+
+helpmenu = Menu(menubar, tearoff=0)
 helpmenu.add_command(label="Help Index")
 helpmenu.add_command(label="About...",command=ndihma)
 menubar.add_cascade(label="Help", menu=helpmenu)
 
+
+
 window.config(menu=menubar)
+window.bind('<Configure>',resize) #funksioni Resize
 window.mainloop()
