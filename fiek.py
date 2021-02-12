@@ -4,6 +4,7 @@ from PIL import ImageTk, Image
 from tkinter import filedialog
 from tkinter import messagebox
 from tkinter.filedialog import askopenfile
+import time as tm
 
 def hap():
     try:
@@ -18,18 +19,24 @@ def ndihma():
 
 def resize(e):
     global image1, resizer,image2
-    image1 = Image.open("C:\\Users\\DELL\\Desktop\\New folder\\j.png")
+    image1 = Image.open("C:\\Users\\DELL\\Desktop\\New folder\\j.jpg")
     resizer = image1.resize((e.width,e.height), Image.ANTIALIAS)
     image2 = ImageTk.PhotoImage(resizer)
     canvas.create_image(0,0,anchor=NW,image=image2)
 
+def show():
+   text_input = tm.strftime("%H:%M:%S")
 
 
 window = Tk()
 window.title("Siguri 2021©")
-canvas = Canvas(window,width=500, height=500)
+icon = PhotoImage(file = "C:\\Users\\DELL\\Desktop\\New folder\\k.png")
+window.iconphoto(False,icon)
+canvas = Canvas(window,width=500, height=300)
 canvas.pack(fill="both", expand=True)
-my_image = ImageTk.PhotoImage(file="C:\\Users\\DELL\\Desktop\\New folder\\j.png")
+label = Label(canvas, text="Spam")
+label.place(relx = 0.0, rely =1.0, anchor='sw')
+my_image = ImageTk.PhotoImage(file="C:\\Users\\DELL\\Desktop\\New folder\\j.jpg")
 canvas.create_image(0,0,anchor=NW,image=my_image)
 menubar = Menu(window)
 filemenu = Menu(menubar,tearoff=0)
@@ -57,7 +64,7 @@ menubar.add_cascade(label="Edit", menu=editmenu)
 view = Menu(menubar, tearoff=0)
 view.add_command(label="Zoom In")
 view.add_command(label="Zoom Out")
-view.add_command(label="Status Bar")
+view.add_command(label="Show Time",command=show)
 menubar.add_cascade(label="View", menu=view)
 
 helpmenu = Menu(menubar, tearoff=0)
