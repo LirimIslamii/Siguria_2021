@@ -4,7 +4,9 @@ from PIL import ImageTk, Image
 from tkinter import filedialog
 from tkinter import messagebox
 from tkinter.filedialog import askopenfile
-import time as tm
+import time
+from tkinter import Entry
+
 
 def hap():
     try:
@@ -25,8 +27,52 @@ def resize(e):
     canvas.create_image(0,0,anchor=NW,image=image2)
 
 def show():
-   text_input = tm.strftime("%H:%M:%S")
+    newWindow = Toplevel(window)
+    newWindow.title("Timer")
+    newWindow.geometry("200x150")
+    hour=IntVar()
+    minute=IntVar()
+    second=IntVar()
+    hour.set("00")
+    minute.set("00")
+    second.set("00")
+    hourEntry= Entry(newWindow, width=3, font=("Arial",18,""),
+                     textvariable=hour)
+    hourEntry.place(x=20,y=20)
 
+    minuteEntry= Entry(newWindow, width=3, font=("Arial",18,""),
+                       textvariable=minute)
+    minuteEntry.place(x=80,y=20)
+
+    secondEntry= Entry(newWindow, width=3, font=("Arial",18,""),
+                       textvariable=second)
+    secondEntry.place(x=140,y=20)
+
+
+    def submit():
+        try:
+            temp = int(hour.get())*3600 + int(minute.get())*60 + int(second.get())
+            while temp >-1:
+                mins,secs = divmod(temp,60)
+                hours=0
+                if mins >60:
+                    hours, mins = divmod(mins, 60)
+                hour.set("{00:2d}".format(hours))
+                minute.set("{00:2d}".format(mins))
+                second.set("{00:2d}".format(secs))
+                newWindow.update()
+                time.sleep(1)
+                if (temp == 0):
+                    messagebox.showinfo("Time Countdown", "Koha Kaloi")
+                temp -= 1
+        except:
+            messagebox.showinfo("Error","Ju lutem shenoni vetem numra!")
+
+    def Close():
+        newWindow.destroy()
+
+    btn = Button(newWindow, text='Timer Counter',command=lambda:[submit(),Close()])
+    btn.place(relx=0.5,rely=0.7, anchor="center")
 
 window = Tk()
 window.title("Siguri 2021©")
@@ -34,8 +80,6 @@ icon = PhotoImage(file = "C:\\Users\\DELL\\Desktop\\New folder\\k.png")
 window.iconphoto(False,icon)
 canvas = Canvas(window,width=500, height=300)
 canvas.pack(fill="both", expand=True)
-label = Label(canvas, text="Spam")
-label.place(relx = 0.0, rely =1.0, anchor='sw')
 my_image = ImageTk.PhotoImage(file="C:\\Users\\DELL\\Desktop\\New folder\\j.jpg")
 canvas.create_image(0,0,anchor=NW,image=my_image)
 menubar = Menu(window)
@@ -64,7 +108,7 @@ menubar.add_cascade(label="Edit", menu=editmenu)
 view = Menu(menubar, tearoff=0)
 view.add_command(label="Zoom In")
 view.add_command(label="Zoom Out")
-view.add_command(label="Show Time",command=show)
+view.add_command(label="Clock Timer",command=show)
 menubar.add_cascade(label="View", menu=view)
 
 helpmenu = Menu(menubar, tearoff=0)
