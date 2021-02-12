@@ -62,7 +62,7 @@ def show():
                 second.set("{00:2d}".format(secs))
                 newWindow.update()
                 time.sleep(1)
-                if (temp == 0):
+                if (temp == 00):
                     messagebox.showinfo("Time Countdown", "Koha Kaloi")
                 temp -= 1
         except:
@@ -71,8 +71,18 @@ def show():
     def Close():
         newWindow.destroy()
 
-    btn = Button(newWindow, text='Timer Counter',command=lambda:[submit(),Close()])
+    btn = Button(newWindow, text='Timer',command=lambda:[submit(),Close()])
     btn.place(relx=0.5,rely=0.7, anchor="center")
+
+def Expand_In():
+    width  = window.winfo_screenwidth()
+    height = window.winfo_screenheight()
+    window.geometry(f'{width}x{height}+0+0')
+
+def Expand_Out():
+    width  = window.winfo_screenwidth()
+    height = window.winfo_screenheight()
+    f = window.geometry('%sx%s' % (int(width/2.56), int(height/2.4)))
 
 window = Tk()
 window.title("Siguri 2021©")
@@ -106,8 +116,8 @@ editmenu.add_command(label="Select All")
 menubar.add_cascade(label="Edit", menu=editmenu)
 
 view = Menu(menubar, tearoff=0)
-view.add_command(label="Zoom In")
-view.add_command(label="Zoom Out")
+view.add_command(label="Expand In", command=Expand_In)
+view.add_command(label="Expand Out",command=Expand_Out)
 view.add_command(label="Clock Timer",command=show)
 menubar.add_cascade(label="View", menu=view)
 
