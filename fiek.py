@@ -6,6 +6,7 @@ from tkinter import messagebox
 from tkinter.filedialog import askopenfile
 import time
 from tkinter import Entry
+import os
 
 
 def hap():
@@ -84,7 +85,7 @@ def Expand_Out():
     height = window.winfo_screenheight()
     f = window.geometry('%sx%s' % (int(width/2.56), int(height/2.4)))
 
-    
+
 window = Tk()
 window.title("Siguri 2021©")
 icon = PhotoImage(file = "C:\\Users\\DELL\\Desktop\\New folder\\k.png")
@@ -128,13 +129,15 @@ helpmenu.add_command(label="About...",command=ndihma)
 menubar.add_cascade(label="Help", menu=helpmenu)
 
 
-f=Frame(window)
+f=Toplevel(window)
+f.geometry("300x200")
+f.resizable(0,0)
 
 tv=Treeview(f,show='tree')
 ybar=Scrollbar(f,orient=VERTICAL,command=tv.yview)
 tv.configure(yscroll=ybar.set)
 
-directory='C:\\Users\\Uran\\Desktop\\Python'
+directory='C:\\Users\\DELL\\Desktop'
 
 tv.heading('#0',text='Dir：'+directory,anchor='w')
 path=os.path.abspath(directory)
@@ -151,7 +154,6 @@ def traverse_dir(parent,path):
 traverse_dir(node,path)
 ybar.pack(side=RIGHT,fill=Y)
 tv.pack()
-f.pack()
 
 
 
