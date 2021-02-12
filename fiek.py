@@ -84,6 +84,30 @@ def Expand_Out():
     height = window.winfo_screenheight()
     f = window.geometry('%sx%s' % (int(width/2.56), int(height/2.4)))
 
+f=tk.Frame(root)
+
+tv=ttk.Treeview(f,show='tree')
+ybar=tk.Scrollbar(f,orient=tk.VERTICAL,command=tv.yview)
+tv.configure(yscroll=ybar.set)
+
+directory='C:\\Users\\Uran\\Desktop\\Python\\'
+
+tv.heading('#0',text='Dir：'+directory,anchor='w')
+path=os.path.abspath(directory)
+node=tv.insert('','end',text=path,open=True)
+
+def traverse_dir(parent,path):
+    for d in os.listdir(path):
+        full_path=os.path.join(path,d)
+        isdir = os.path.isdir(full_path)
+        id=tv.insert(parent,'end',text=d,open=False)
+        if isdir:
+            traverse_dir(id,full_path)
+
+traverse_dir(node,path)
+ybar.pack(side=tk.RIGHT,fill=tk.Y)
+tv.pack()
+    
 window = Tk()
 window.title("Siguri 2021©")
 icon = PhotoImage(file = "C:\\Users\\DELL\\Desktop\\New folder\\k.png")
