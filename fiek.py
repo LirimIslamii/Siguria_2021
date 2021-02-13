@@ -122,10 +122,10 @@ def struktura():
 def help():
     global help
     help = Toplevel(window,bg='#ccffcc')
-    help.geometry("300x300")
+    help.geometry("500x80")
     help.title("Help Index")
     help.resizable(0,0)
-    label = Label(help,text="Hello",bg="#ccffcc",font=("Perpetua",12))
+    label = Label(help,text="Shiko linkun \n https://github.com/LirimIslamii/Siguria_2021/blob/main/README.m \n informacionet rreth programit dhe rreth krijimit të tij!",bg="#ccffcc",font=("Perpetua",12))
     label.pack()
     help.mainloop()
 
