@@ -1,5 +1,4 @@
 from tkinter import *
-from tkinter import *
 from tkinter.ttk import Treeview
 from PIL import ImageTk, Image
 from tkinter import filedialog
