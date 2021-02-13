@@ -1,3 +1,6 @@
+import os
+import sys
+from tkinter import *
 from tkinter import *
 from tkinter.ttk import Treeview
 from PIL import ImageTk, Image
@@ -6,8 +9,6 @@ from tkinter import messagebox
 from tkinter.filedialog import askopenfile
 import time
 from tkinter import Entry
-import os
-import subprocess
 
 
 def hap():
@@ -97,23 +98,27 @@ def struktura():
     ybar=Scrollbar(f,orient=VERTICAL,command=tv.yview)
     tv.configure(yscroll=ybar.set)
 
-    directory='C:\\Users\\DELL\\Desktop'
+    path = sys.executable
+    directory = path.split('\\')[0]
 
     tv.heading('#0',text='Dir：'+directory,anchor='w')
     path=os.path.abspath(directory)
     node=tv.insert('','end',text=path,open=True)
 
     def traverse_dir(parent,path):
-        for d in os.listdir(path):
-            full_path=os.path.join(path,d)
-            isdir = os.path.isdir(full_path)
-            id=tv.insert(parent,'end',text=d,open=False)
-            if isdir:
-                traverse_dir(id,full_path)
+        if os.access(directory,os.X_OK):
+            for d in os.listdir(path):
+                full_path=os.path.join(path,d)
+                isdir = os.path.isdir(full_path)
+                id=tv.insert(parent,'end',text=d,open=False)
+                if isdir:
+                    traverse_dir(id,full_path)
 
     traverse_dir(node,path)
     ybar.pack(side=RIGHT,fill=Y)
     tv.pack()
+
+
 
 
 window = Tk()
@@ -126,8 +131,8 @@ my_image = ImageTk.PhotoImage(file="C:\\Users\\DELL\\Desktop\\New folder\\j.jpg"
 canvas.create_image(0,0,anchor=NW,image=my_image)
 menubar = Menu(window)
 filemenu = Menu(menubar,tearoff=0)
-filemenu.add_command(label="New",command=struktura)
-filemenu.add_command(label="Open")
+filemenu.add_command(label="New")
+filemenu.add_command(label="Open",command=struktura)
 filemenu.add_command(label="Save")
 filemenu.add_command(label="Save as...")
 filemenu.add_command(label="Close")
