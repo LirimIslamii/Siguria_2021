@@ -1,5 +1,6 @@
 from tkinter import *
-from tkinter.ttk import *
+from tkinter import *
+from tkinter.ttk import Treeview
 from PIL import ImageTk, Image
 from tkinter import filedialog
 from tkinter import messagebox
@@ -7,6 +8,7 @@ from tkinter.filedialog import askopenfile
 import time
 from tkinter import Entry
 import os
+import subprocess
 
 
 def hap():
@@ -31,6 +33,7 @@ def show():
     newWindow = Toplevel(window)
     newWindow.title("Timer")
     newWindow.geometry("200x150")
+    newWindow.resizable(0,0)
     hour=IntVar()
     minute=IntVar()
     second=IntVar()
@@ -72,7 +75,7 @@ def show():
     def Close():
         newWindow.destroy()
 
-    btn = Button(newWindow, text='Timer',command=lambda:[submit(),Close()])
+    btn = Button(newWindow, text='Timer',bg="blue",bd="5",command=lambda:[submit(),Close()])
     btn.place(relx=0.5,rely=0.7, anchor="center")
 
 def Expand_In():
@@ -85,6 +88,34 @@ def Expand_Out():
     height = window.winfo_screenheight()
     f = window.geometry('%sx%s' % (int(width/2.56), int(height/2.4)))
 
+def struktura():
+
+    f=Toplevel(window)
+    f.geometry("300x200")
+    f.resizable(0,0)
+
+    tv=Treeview(f,show='tree')
+    ybar=Scrollbar(f,orient=VERTICAL,command=tv.yview)
+    tv.configure(yscroll=ybar.set)
+
+    directory='C:\\Users\\DELL\\Desktop'
+
+    tv.heading('#0',text='Dir：'+directory,anchor='w')
+    path=os.path.abspath(directory)
+    node=tv.insert('','end',text=path,open=True)
+
+    def traverse_dir(parent,path):
+        for d in os.listdir(path):
+            full_path=os.path.join(path,d)
+            isdir = os.path.isdir(full_path)
+            id=tv.insert(parent,'end',text=d,open=False)
+            if isdir:
+                traverse_dir(id,full_path)
+
+    traverse_dir(node,path)
+    ybar.pack(side=RIGHT,fill=Y)
+    tv.pack()
+
 
 window = Tk()
 window.title("Siguri 2021©")
@@ -96,7 +127,7 @@ my_image = ImageTk.PhotoImage(file="C:\\Users\\DELL\\Desktop\\New folder\\j.jpg"
 canvas.create_image(0,0,anchor=NW,image=my_image)
 menubar = Menu(window)
 filemenu = Menu(menubar,tearoff=0)
-filemenu.add_command(label="New",command=hap)
+filemenu.add_command(label="New",command=struktura)
 filemenu.add_command(label="Open")
 filemenu.add_command(label="Save")
 filemenu.add_command(label="Save as...")
@@ -128,32 +159,6 @@ helpmenu.add_command(label="Help Index")
 helpmenu.add_command(label="About...",command=ndihma)
 menubar.add_cascade(label="Help", menu=helpmenu)
 
-
-f=Toplevel(window)
-f.geometry("300x200")
-f.resizable(0,0)
-
-tv=Treeview(f,show='tree')
-ybar=Scrollbar(f,orient=VERTICAL,command=tv.yview)
-tv.configure(yscroll=ybar.set)
-
-directory='C:\\Users\\DELL\\Desktop'
-
-tv.heading('#0',text='Dir：'+directory,anchor='w')
-path=os.path.abspath(directory)
-node=tv.insert('','end',text=path,open=True)
-
-def traverse_dir(parent,path):
-        for d in os.listdir(path):
-            full_path=os.path.join(path,d)
-            isdir = os.path.isdir(full_path)
-            id=tv.insert(parent,'end',text=d,open=False)
-            if isdir:
-                traverse_dir(id,full_path)
-
-traverse_dir(node,path)
-ybar.pack(side=RIGHT,fill=Y)
-tv.pack()
 
 
 
