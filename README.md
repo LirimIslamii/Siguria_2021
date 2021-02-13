@@ -35,6 +35,5 @@
             
       Shënojmë cd "Emrin e folder se ku gjendet fajlli fiek.py" (Zakonisht cd Downloads)
       Shkruajmë komandën "python fiek.py" dhe pastaj shfaqet Aplikacioni (Dritarja të cilën e kemi krijuar)
-
-            <img width="675" alt="Screenshot_1" src="https://user-images.githubusercontent.com/61246827/107861449-03799d80-6e46-11eb-97ef-3af2533f70c9.png">
+    
 
