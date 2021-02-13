@@ -111,8 +111,13 @@ def struktura():
                 full_path=os.path.join(path,d)
                 isdir = os.path.isdir(full_path)
                 id=tv.insert(parent,'end',text=d,open=False)
-                if isdir:
-                    traverse_dir(id,full_path)
+                try:
+                    if isdir:
+                        traverse_dir(id,full_path)
+                except PermissionError:
+                    print("PermissionError ne: " + full_path)
+                except:
+                    print("Diqka tjeter eshte gabim")
 
     traverse_dir(node,path)
     ybar.pack(side=RIGHT,fill=Y)
