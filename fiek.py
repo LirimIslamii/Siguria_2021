@@ -1,9 +1,11 @@
 import os
 import sys
+import subprocess
 from tkinter import *
 from tkinter import *
 from tkinter.ttk import Treeview
 from PIL import ImageTk, Image
+from tkinter import Text
 from tkinter import filedialog
 from tkinter import messagebox
 from tkinter.filedialog import askopenfile
@@ -67,15 +69,17 @@ def show():
                 newWindow.update()
                 time.sleep(1)
                 if (temp == 00):
-                    messagebox.showinfo("Time Countdown", "Koha Kaloi")
+                    a = messagebox.askquestion("Timer", "Dritarja Kryesore do te mbyllet pas 4 sekondas! Deshironi ta mbyllni?")
+                    newWindow.destroy()
+                    if a == "yes":
+                        window.after(4000,lambda:window.destroy())
                 temp -= 1
         except:
-            messagebox.showinfo("Error","Ju lutem shenoni vetem numra!")
+            messagebox.showerror("Error","Ju lutem shenoni vetem numra!")
 
-    def Close():
-        newWindow.destroy()
 
-    btn = Button(newWindow, text='Timer',bg="blue",bd="5",command=lambda:[submit(),Close()])
+
+    btn = Button(newWindow, text='Timer',bg="blue",bd="5",command=submit)
     btn.place(relx=0.5,rely=0.7, anchor="center")
 
 def Expand_In():
@@ -89,7 +93,7 @@ def Expand_Out():
     f = window.geometry('%sx%s' % (int(width/2.56), int(height/2.4)))
 
 def struktura():
-
+    global f,path
     f=Toplevel(window)
     f.geometry("300x200")
     f.resizable(0,0)
@@ -115,16 +119,52 @@ def struktura():
                     if isdir:
                         traverse_dir(id,full_path)
                 except PermissionError:
-                    print("PermissionError ne: " + full_path)
+                    print("PermissionError in file: " + full_path)
                 except:
-                    print("Diqka tjeter eshte gabim")
+                    print("Something else went wrong")
 
     traverse_dir(node,path)
     ybar.pack(side=RIGHT,fill=Y)
     tv.pack()
 
+def open():
+    global inter
+    inter = Toplevel(window)
+    inter.title("Notepad")
+    menubar = Menu(inter)
+    filemenu = Menu(menubar,tearoff=0)
+    filemenu.add_command(label="Save")
+    filemenu.add_command(label="Save as...")
+    menubar.add_cascade(label="File", menu=filemenu)
+    inter.config(menu=menubar)
+    inter.minsize(height=250, width=350)
+    inter.resizable(0,0)
+    scrollbar = Scrollbar(inter)
+    scrollbar.pack(side=RIGHT,fill=Y)
+    text_info = Text(inter, yscrollcommand=scrollbar.set)
+    text_info.pack(fill=BOTH)
+    scrollbar.config(command=text_info.yview)
+    inter.mainloop()
 
 
+def hiqe():
+    try:
+        if f.winfo_exists():
+            f.destroy()
+        if inter.winfo_exists():
+            inter.destroy()
+    except:
+        messagebox.showerror("Error","Nuk eshte e hapur asnje dritare!")
+
+def help():
+    global help
+    help = Toplevel(window,bg='#ccffcc')
+    help.geometry("300x300")
+    help.title("Help Index")
+    help.resizable(0,0)
+    label = Label(help,text="Hello",bg="#ccffcc",font=("Perpetua",12))
+    label.pack()
+    help.mainloop()
 
 window = Tk()
 window.title("Siguri 2021©")
@@ -136,26 +176,13 @@ my_image = ImageTk.PhotoImage(file="C:\\Users\\DELL\\Desktop\\New folder\\j.jpg"
 canvas.create_image(0,0,anchor=NW,image=my_image)
 menubar = Menu(window)
 filemenu = Menu(menubar,tearoff=0)
-filemenu.add_command(label="New")
+filemenu.add_command(label="New", command=open)
 filemenu.add_command(label="Open",command=struktura)
-filemenu.add_command(label="Save")
-filemenu.add_command(label="Save as...")
-filemenu.add_command(label="Close")
+filemenu.add_command(label="Close",command=hiqe)
 filemenu.add_separator()
 filemenu.add_command(label="Exit", command=window.quit)
 menubar.add_cascade(label="File", menu=filemenu)
-editmenu = Menu(menubar,tearoff=0)
-editmenu.add_command(label="Undo")
 
-editmenu.add_separator()
-
-editmenu.add_command(label="Cut")
-editmenu.add_command(label="Copy")
-editmenu.add_command(label="Paste")
-editmenu.add_command(label="Delete")
-editmenu.add_command(label="Select All")
-
-menubar.add_cascade(label="Edit", menu=editmenu)
 
 view = Menu(menubar, tearoff=0)
 view.add_command(label="Expand In", command=Expand_In)
@@ -164,7 +191,7 @@ view.add_command(label="Clock Timer",command=show)
 menubar.add_cascade(label="View", menu=view)
 
 helpmenu = Menu(menubar, tearoff=0)
-helpmenu.add_command(label="Help Index")
+helpmenu.add_command(label="Help Index", command=help)
 helpmenu.add_command(label="About...",command=ndihma)
 menubar.add_cascade(label="Help", menu=helpmenu)
 
