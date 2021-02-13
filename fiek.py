@@ -195,7 +195,58 @@ helpmenu.add_command(label="Help Index", command=help)
 helpmenu.add_command(label="About...",command=ndihma)
 menubar.add_cascade(label="Help", menu=helpmenu)
 
+#save dhe save as
+#----------------------------------------------------------------------------------------------------------------------------------------
+global open_status_name
+open_status_name = False
 
+global selected
+selected = False
+
+# Ruaje si fajll
+def save_as_file():
+	text_file = filedialog.asksaveasfilename(defaultextension=".*", initialdir="C:/gui/", title="Save File", filetypes=(("Text Files", "*.txt"), ("HTML Files", "*.html"), ("Python Files", "*.py"), ("All Files", "*.*")))
+	if text_file:
+		name = text_file
+		name = name.replace("C:/gui/", "")
+		root.title(f'{name} - TextPad!')
+
+		# Ruan fajllin
+		text_file = open(text_file, 'w')
+		text_file.write(my_text.get(1.0, END))
+		# Mbyll fajllin
+		text_file.close()
+
+# Ruaje fajllin
+def save_file():
+	global open_status_name
+	if open_status_name:
+		# Ruaje fajllin
+		text_file = open(open_status_name, 'w')
+		text_file.write(my_text.get(1.0, END))
+		# Mbyll fajllin
+		text_file.close()
+		# Rivendose emrin
+		name = open_status_name
+		root.title(f'{name} - Text Fajlli!')
+	else:
+		save_as_file()
+
+my_frame = Frame(root)
+my_frame.pack(pady=5)
+
+my_text = Text(my_frame, width=97, height=25, font=("Helvetica", 16), selectbackground="yellow", selectforeground="black")
+my_text.pack()
+
+# Krijo menu-ne
+my_menu = Menu(root)
+root.config(menu=my_menu)
+
+file_menu = Menu(my_menu, tearoff=False)
+my_menu.add_cascade(label="File", menu=file_menu)
+file_menu.add_command(label="Save", command=save_file)
+file_menu.add_command(label="Save As...", command=save_as_file)
+#----------------------------------------------------------------------------------------------------------------------------------------
 
 
 window.config(menu=menubar)
