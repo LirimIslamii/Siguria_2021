@@ -11,6 +11,7 @@ from tkinter import messagebox
 from tkinter.filedialog import askopenfile
 import time
 from tkinter import Entry
+from tkinter import font
 
 
 def hap():
@@ -26,7 +27,7 @@ def ndihma():
 
 def resize(e):
     global image1, resizer,image2
-    image1 = Image.open("C:\\Users\\DELL\\Desktop\\New folder\\j.jpg")
+    image1 = Image.openi("C:\\Users\\Uran\\Desktop\\Python\\Siguria_2021-main\\j.jpg")
     resizer = image1.resize((e.width,e.height), Image.ANTIALIAS)
     image2 = ImageTk.PhotoImage(resizer)
     canvas.create_image(0,0,anchor=NW,image=image2)
@@ -107,14 +108,14 @@ def struktura():
 
     tv.heading('#0',text='Dir：'+directory,anchor='w')
     path=os.path.abspath(directory)
-    node=tv.insert('','end',text=path,open=True)
+    node=tv.insert('','end',text=path,openi=True)
 
     def traverse_dir(parent,path):
         if os.access(directory,os.X_OK):
             for d in os.listdir(path):
                 full_path=os.path.join(path,d)
                 isdir = os.path.isdir(full_path)
-                id=tv.insert(parent,'end',text=d,open=False)
+                id=tv.insert(parent,'end',text=d,openi=False)
                 try:
                     if isdir:
                         traverse_dir(id,full_path)
@@ -127,25 +128,61 @@ def struktura():
     ybar.pack(side=RIGHT,fill=Y)
     tv.pack()
 
-def open():
+def openi():
     global inter
     inter = Toplevel(window)
     inter.title("Notepad")
-    menubar = Menu(inter)
-    filemenu = Menu(menubar,tearoff=0)
-    filemenu.add_command(label="Save")
-    filemenu.add_command(label="Save as...")
-    menubar.add_cascade(label="File", menu=filemenu)
-    inter.config(menu=menubar)
-    inter.minsize(height=250, width=350)
-    inter.resizable(0,0)
-    scrollbar = Scrollbar(inter)
-    scrollbar.pack(side=RIGHT,fill=Y)
-    text_info = Text(inter, yscrollcommand=scrollbar.set)
-    text_info.pack(fill=BOTH)
-    scrollbar.config(command=text_info.yview)
-    inter.mainloop()
+    #save dhe save as
+    #----------------------------------------------------------------------------------------------------------------------------------------
+    global open_status_name
+    open_status_name = False
 
+    global selected
+    selected = False
+
+    # Ruaje si fajll
+    def save_as_file():
+        text_file = filedialog.asksaveasfilename(defaultextension=".*", initialdir="C:/gui/", title="Save File", 
+                    filetypes=(("Text Files", "*.txt"), ("HTML Files", "*.html"), ("Python Files", "*.py"), ("All Files", "*.*")))
+        if text_file:
+            name = text_file
+            name = name.replace("C:/gui/", "")
+            window.title(f'{name} - TextPad!')
+
+            # Ruan fajllin
+            text_file = open(text_file, 'w')
+            text_file.write(my_text.get(1.0, END))
+            # Mbyll fajllin
+            text_file.close()
+
+    # Ruaje fajllin
+    def save_file():
+        global open_status_name
+        if open_status_name:
+            # Ruaje fajllin
+            text_file = open(open_status_name, 'w')
+            text_file.write(my_text.get(1.0, END))
+            # Mbyll fajllin
+            text_file.close()
+            # Rivendose emrin
+            name = open_status_name
+            window.title(f'{name} - Text Fajlli!')
+        else:
+            save_as_file()
+
+    my_text = Text(inter, width=97, height=25, font=("Helvetica", 16), selectbackground="yellow", selectforeground="black")
+    my_text.pack()
+
+    # Krijo menu-ne
+    my_menu = Menu(inter)
+    inter.config(menu=my_menu)
+
+    file_menu = Menu(my_menu, tearoff=False)
+    my_menu.add_cascade(label="File", menu=file_menu)
+    file_menu.add_command(label="Save", command=save_file)
+    file_menu.add_command(label="Save As...", command=save_as_file)
+    #----------------------------------------------------------------------------------------------------------------------------------------
+    inter.mainloop()
 
 def hiqe():
     try:
@@ -168,15 +205,15 @@ def help():
 
 window = Tk()
 window.title("Siguri 2021©")
-icon = PhotoImage(file = "C:\\Users\\DELL\\Desktop\\New folder\\k.png")
+icon = PhotoImage(file = "C:\\Users\\Uran\\Desktop\\Python\\Siguria_2021-main\\k.png")
 window.iconphoto(False,icon)
 canvas = Canvas(window,width=500, height=300)
 canvas.pack(fill="both", expand=True)
-my_image = ImageTk.PhotoImage(file="C:\\Users\\DELL\\Desktop\\New folder\\j.jpg")
+my_image = ImageTk.PhotoImage(file="C:\\Users\\Uran\\Desktop\\Python\\Siguria_2021-main\\j.jpg")
 canvas.create_image(0,0,anchor=NW,image=my_image)
 menubar = Menu(window)
 filemenu = Menu(menubar,tearoff=0)
-filemenu.add_command(label="New", command=open)
+filemenu.add_command(label="New", command=openi)
 filemenu.add_command(label="Open",command=struktura)
 filemenu.add_command(label="Close",command=hiqe)
 filemenu.add_separator()
@@ -195,58 +232,7 @@ helpmenu.add_command(label="Help Index", command=help)
 helpmenu.add_command(label="About...",command=ndihma)
 menubar.add_cascade(label="Help", menu=helpmenu)
 
-#save dhe save as
-#----------------------------------------------------------------------------------------------------------------------------------------
-global open_status_name
-open_status_name = False
 
-global selected
-selected = False
-
-# Ruaje si fajll
-def save_as_file():
-	text_file = filedialog.asksaveasfilename(defaultextension=".*", initialdir="C:/gui/", title="Save File", filetypes=(("Text Files", "*.txt"), ("HTML Files", "*.html"), ("Python Files", "*.py"), ("All Files", "*.*")))
-	if text_file:
-		name = text_file
-		name = name.replace("C:/gui/", "")
-		root.title(f'{name} - TextPad!')
-
-		# Ruan fajllin
-		text_file = open(text_file, 'w')
-		text_file.write(my_text.get(1.0, END))
-		# Mbyll fajllin
-		text_file.close()
-
-# Ruaje fajllin
-def save_file():
-	global open_status_name
-	if open_status_name:
-		# Ruaje fajllin
-		text_file = open(open_status_name, 'w')
-		text_file.write(my_text.get(1.0, END))
-		# Mbyll fajllin
-		text_file.close()
-		# Rivendose emrin
-		name = open_status_name
-		root.title(f'{name} - Text Fajlli!')
-	else:
-		save_as_file()
-
-my_frame = Frame(root)
-my_frame.pack(pady=5)
-
-my_text = Text(my_frame, width=97, height=25, font=("Helvetica", 16), selectbackground="yellow", selectforeground="black")
-my_text.pack()
-
-# Krijo menu-ne
-my_menu = Menu(root)
-root.config(menu=my_menu)
-
-file_menu = Menu(my_menu, tearoff=False)
-my_menu.add_cascade(label="File", menu=file_menu)
-file_menu.add_command(label="Save", command=save_file)
-file_menu.add_command(label="Save As...", command=save_as_file)
-#----------------------------------------------------------------------------------------------------------------------------------------
 
 
 window.config(menu=menubar)
